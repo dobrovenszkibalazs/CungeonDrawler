@@ -1,5 +1,5 @@
-# paint
-Paint... rajzolj!
+# Bazsal's Cungeon Drawler
+Dungeon crawler játék... ja
 The year's at the spring
 And day's at the morn;
 Morning's at seven;
