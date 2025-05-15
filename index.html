@@ -4,18 +4,60 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="scrips/start.js" defer></script>
+    <script src="scripts/start.js" defer></script>
     <link rel="stylesheet" href="style.css">
     <title>Cungeon Drawler</title>
 </head>
 <body>
-    <div id="main-menu">
+    <header>
         <h1>Cungeon Drawler</h1>
+    </header>
+    <div id="mainMenu">
         <p>Ez egy dungeon crawler jatek... ja</p>
+        <p>Mi a neved, manóemberke?:</p>
+        <input type="text" id="nameBox">
         <input type="button" value="START" onclick="start()">
     </div>
-    <main id="main-game">
-        <p>Megy</p>
+    <main id="mainGame">
+        <div id="plrStats">
+            <p id="plrName"></p>
+            <p id="plrHealth"></p>
+            <p id="plrMoney"></p>
+            <p id="plrWeapon"></p>
+            <p id="plrArmor"></p>
+            <p id="plrResistance"></p>
+            <p id="plrSpeed"></p>
+            <p id="plrInventorySpace"></p>
+            <div id="plrInvetory">
+                
+            </div>
+        </div>
+        <div id="mainWindow">
+            <div id="gameArea">
+                <p id="floorNumber"></p>
+                <div id="effectsBox"></div>
+                <p id="enemyHealth2"></p>
+                <p id="enemyHealth1"></p>
+                <p id="enemyHealth3"></p>
+                <div id="enemyDisplay2"></div>
+                <div id="enemyDisplay1"></div>
+                <div id="enemyDisplay3"></div>
+                <div id="textBox">
+                    <p id="textDialogue"></p>
+                </div>
+            </div>
+        </div>
+        <div id="actions">
+            <div id="button2">
+                <p>Button2</p>
+            </div>
+            <div id="button1">
+                <p>Button1</p>
+            </div>
+            <div id="button3">
+                <p>Button3</p>
+            </div>
+        </div>
     </main>
 </body>
 </html>

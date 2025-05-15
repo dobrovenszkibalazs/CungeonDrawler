@@ -1,3 +1,76 @@
-#main-game {
-    visibility: hidden;
+#mainGame {
+    width: 75%;
+    height: 800px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    grid-template-rows: 85% 15%;
+    gap: 50px;
+}
+
+#mainMenu {
+    width: 25%;
+    margin: auto;
+    text-align: center;
+}
+
+/* #region Player Stats */
+#plrStats {
+    background-color: blue;
+    margin-left: 20px;
+    padding-left: 15px;
+    border: solid black 4px;
+    grid-row: 1 / span 2;
+}
+
+#plrName {
+    font-size: xx-large;
+}
+
+#plrStats {
+    font-size: x-large;
+}
+/* #endregion */
+
+/* #region Main Window */
+
+#mainWindow {
+    background-color: aliceblue;
+    width: 100%;
+    height: 100%;
+    border: 5px solid black;
+}
+
+#textBox {
+    width: 80%;
+    font-size: larger;
+    text-align: justify;
+    border: solid black 4px;
+}
+/* #endregion */
+
+/* #region Action Buttons */
+
+#actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#actions div {
+    background-color: brown;
+    width: 25%;
+    height: 85%;
+    text-align: center;
+    border: 5px solid black;
+}
+
+#actions div p {
+    font-size: xx-large;
+}
+
+/* #endregion */
+
+h1 {
+    text-align: center;
 }
