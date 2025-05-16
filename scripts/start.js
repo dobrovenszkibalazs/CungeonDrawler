@@ -37,9 +37,14 @@ const player = {
 };
 var floor = 1;
 var stage = 1;
+var map = [];
 
 main.style.display = "none";
 menu.style.display = "block";
+
+function RNG(min, max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
 
 function updateStats() {
     stats_name.innerText = player.name;
@@ -54,10 +59,22 @@ function updateStats() {
     } else {
         stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 8;
     }
+    display_floor.innerText = "Floor " + floor;
 }
 
-function updateStage {
-
+function generateLevel() {
+    map = [];
+    for (let i = 0; i < 100; i++) {
+        var currFloor = [];
+        if ((i+1) % 20 != 0) {
+            for (let j = 0; j < RNG(4,6); j++) {
+                currFloor[j] = (RNG(1,2) == 1) ? "Halal" : "Elet";
+            }
+        } else {
+            currFloor[0] = "Boss";
+        }
+        map[i] = currFloor;
+    }
 }
 
 function start() {
@@ -68,4 +85,6 @@ function start() {
     player.weapon = "Stick";
     player.armor = "-";
     updateStats();
+    generateLevel();
+    console.log(map);
 }

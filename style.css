@@ -16,7 +16,7 @@
 
 /* #region Player Stats */
 #plrStats {
-    background-color: blue;
+    background-color: grey;
     margin-left: 20px;
     padding-left: 15px;
     border: solid black 4px;
@@ -35,10 +35,15 @@
 /* #region Main Window */
 
 #mainWindow {
-    background-color: aliceblue;
+    background-color: grey;
     width: 100%;
     height: 100%;
     border: 5px solid black;
+}
+
+#gameArea {
+    display: grid;
+    grid-template-columns: auto auto auto;
 }
 
 #textBox {
@@ -46,6 +51,18 @@
     font-size: larger;
     text-align: justify;
     border: solid black 4px;
+    grid-column: 1 / span 3;
+    margin: auto;
+}
+
+#floorNumber {
+    justify-content: left;
+}
+
+#effectsBox {
+    grid-column: 2 / span 2;
+    justify-content: right;
+    text-align: right;
 }
 /* #endregion */
 
@@ -58,7 +75,7 @@
 }
 
 #actions div {
-    background-color: brown;
+    background-color: grey;
     width: 25%;
     height: 85%;
     text-align: center;
