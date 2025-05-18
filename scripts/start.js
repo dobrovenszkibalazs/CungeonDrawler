@@ -46,6 +46,14 @@ function RNG(min, max) {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
+function sum(events) {
+    var s = 0;
+    events.forEach(e => {
+        s += e.weight * 100;
+    });
+    return s;
+}
+
 function updateStats() {
     stats_name.innerText = player.name;
     stats_health.innerText = "Health: " + player.maxHealth + "/" + player.health;
@@ -60,21 +68,67 @@ function updateStats() {
         stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 8;
     }
     display_floor.innerText = "Floor " + floor;
+    // Effects...
+}
+
+function randomEvent() {
+    // Testing only
+    const test1 = {name: "test1", weight: "1"};
+    const test2 = {name: "test2", weight: "0.5"};
+    const test3 = {name: "test3", weight: "0.1"};
+
+    var events = [test1, test2, test3];
+    var n = RNG(1, sum(events));
+    var i = -1;
+
+    do {
+        i++;
+        n -= events[i].weight * 100;
+    } while (n > 0);
+    return events[i].name;
+}
+
+function canGenerate(n) {
+    return n % 10 != 0; // Need to adjust later...
+}
+
+function generateMonsters(m) {
+    var map = m;
+    var i = 1;
+    while (i < 99) {
+        if (canGenerate(i+1)) {
+            if (RNG(1,2) == 1) {
+                map[i][RNG(1,map[i].length-1)] = "monster... how should I feel?";
+                i += 2;
+            } else {
+                i += 1;
+                map[i][RNG(1,map[i].length-1)] = "monster... how should I feel?";
+                i += 1;
+            }
+        } else {
+            i++;
+        }
+    }
+    return map;
 }
 
 function generateLevel() {
-    map = [];
+    var map = [];
+
     for (let i = 0; i < 100; i++) {
         var currFloor = [];
-        if ((i+1) % 20 != 0) {
+        if (canGenerate(i+1)) {
             for (let j = 0; j < RNG(4,6); j++) {
-                currFloor[j] = (RNG(1,2) == 1) ? "Halal" : "Elet";
+                currFloor[j] = randomEvent();
             }
         } else {
-            currFloor[0] = "Boss";
+            currFloor[0] = "Shop";
         }
         map[i] = currFloor;
     }
+    map = generateMonsters(map);
+
+    return map;
 }
 
 function start() {
@@ -85,6 +139,6 @@ function start() {
     player.weapon = "Stick";
     player.armor = "-";
     updateStats();
-    generateLevel();
+    var map = generateLevel();
     console.log(map);
 }
