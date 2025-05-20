@@ -1,3 +1,11 @@
+body {
+    background-color: black;
+}
+
+p {
+    color: white;
+}
+
 #mainGame {
     width: 75%;
     height: 800px;
@@ -18,7 +26,7 @@
 #plrStats {
     margin-left: 20px;
     padding-left: 15px;
-    border: solid black 4px;
+    border: solid white 4px;
     grid-row: 1 / span 2;
 }
 
@@ -36,7 +44,7 @@
 #mainWindow {
     width: 100%;
     height: 100%;
-    border: 5px solid black;
+    border: 5px solid white;
 }
 
 #gameArea {
@@ -52,13 +60,15 @@
     height: 60%;
     font-size: larger;
     text-align: justify;
-    border: solid black 4px;
+    border: solid white 4px;
     grid-column: 1 / span 3;
     margin: auto;
+    padding: 0px 10px;
 }
 
 #floorNumber {
     justify-content: left;
+    padding-left: 10px;
 }
 
 #effectsBox {
@@ -80,7 +90,7 @@
     width: 25%;
     height: 85%;
     text-align: center;
-    border: 5px solid black;
+    border: 5px solid white;
 }
 
 #actions div p {

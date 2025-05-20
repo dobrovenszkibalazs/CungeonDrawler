@@ -1,3 +1,4 @@
+// #region Variables
 const menu = document.getElementById("mainMenu");
 const main = document.getElementById("mainGame");
 const nameBox = document.getElementById("nameBox");
@@ -35,13 +36,16 @@ const player = {
     inventory:[],
     hasBackpack:false
 };
+const JSON_events = fetchJSON("events");
 var floor = 1;
 var stage = 1;
 var map = [];
+// #endregion
 
 main.style.display = "none";
 menu.style.display = "block";
 
+// #region Tools
 function RNG(min, max) {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
@@ -54,6 +58,20 @@ function sum(events) {
     return s;
 }
 
+function fetchJSON(fn) {
+    fetch('http://127.0.0.1:5500/JSON/' + fn + '.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();  
+        })
+        .then(data => console.log(data))  
+        .catch(error => console.error('Failed to fetch data:', error)); 
+}
+// #endregion
+
+//#region Updates
 function updateStats() {
     stats_name.innerText = player.name;
     stats_health.innerText = "Health: " + player.maxHealth + "/" + player.health;
@@ -71,13 +89,15 @@ function updateStats() {
     // Effects...
 }
 
+function loadText(text) {
+    textBox.innerText = "→ " + text;
+}
+// #endregion
+
+// #region Generation
 function randomEvent() {
     // Testing only
-    const test1 = {name: "test1", weight: "1"};
-    const test2 = {name: "test2", weight: "0.5"};
-    const test3 = {name: "test3", weight: "0.1"};
-
-    var events = [test1, test2, test3];
+    var events = JSON_events;
     var n = RNG(1, sum(events));
     var i = -1;
 
@@ -130,15 +150,34 @@ function generateLevel() {
 
     return map;
 }
+// #endregion
+
+// #region Start/Reset
+function playerReset() {
+    player.weapon = "Stick";
+    player.armor = "-";
+    player.hasBackpack = false;
+    player.resistance = 1.0;
+    player.speed = 1.0;
+    player.maxHealth = 100;
+    player.health = 100;
+    player.money = 0;
+    player.inventory = [];
+    player.effects = [];
+    for (let i = 0; i < 8; i++) {
+        player.inventory[i] = null;
+    }
+    updateStats();
+}
 
 function start() {
     if (nameBox.value == "" || nameBox.value.length > 20 || nameBox.value.length < 4) return -1;
     menu.style.display = "none";
     main.style.display = "grid";
     player.name = nameBox.value;
-    player.weapon = "Stick";
-    player.armor = "-";
-    updateStats();
+    playerReset();
     var map = generateLevel();
+    loadText("Teszt Teszt Teszt!")
     console.log(map);
 }
+// #endregion
