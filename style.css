@@ -1,8 +1,13 @@
+/* #region All */
+h1 {
+    text-align: center;
+}
+
 body {
     background-color: black;
 }
 
-p {
+p, div, h1 {
     color: white;
 }
 
@@ -21,6 +26,7 @@ p {
     margin: auto;
     text-align: center;
 }
+/* #endregion */
 
 /* #region Player Stats */
 #plrStats {
@@ -28,14 +34,26 @@ p {
     padding-left: 15px;
     border: solid white 4px;
     grid-row: 1 / span 2;
+    font-size: x-large;
 }
 
 #plrName {
     font-size: xx-large;
 }
 
-#plrStats {
-    font-size: x-large;
+#plrInventory {
+    margin-left: -15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 10px;
+    justify-content: center;
+}
+
+#plrInventory div {
+    margin: auto;
+    border: 5px solid white;
+    text-align: center;
+    width: 80%;
 }
 /* #endregion */
 
@@ -75,6 +93,7 @@ p {
     grid-column: 2 / span 2;
     justify-content: right;
     text-align: right;
+    margin: 10px 10px 0px 0px;
 }
 /* #endregion */
 
@@ -98,7 +117,3 @@ p {
 }
 
 /* #endregion */
-
-h1 {
-    text-align: center;
-}

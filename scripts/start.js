@@ -36,42 +36,65 @@ const player = {
     inventory:[],
     hasBackpack:false
 };
-const JSON_events = fetchJSON("events");
+
+var JSON_events;
+async function JSON_tweak() {
+    try {
+        JSON_events = await fetchJSON("events");
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+JSON_tweak();
 var floor = 1;
 var stage = 1;
 var map = [];
 // #endregion
 
+// #region Ignore (Initialization)
 main.style.display = "none";
 menu.style.display = "block";
+// #endregion
 
 // #region Tools
-function RNG(min, max) {
-    return Math.floor(Math.random()*(max-min+1)+min);
-}
-
-function sum(events) {
-    var s = 0;
-    events.forEach(e => {
-        s += e.weight * 100;
-    });
-    return s;
-}
-
 function fetchJSON(fn) {
-    fetch('http://127.0.0.1:5500/JSON/' + fn + '.json')
+    return fetch('http://127.0.0.1:5500/JSON/' + fn + '.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            return response.json();  
+            return response.json(); 
         })
-        .then(data => console.log(data))  
-        .catch(error => console.error('Failed to fetch data:', error)); 
+        .catch(error => {
+            console.error('Failed to fetch data:', error);
+            throw error;
+        });
+}
+
+function RNG(min, max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function sum(l) {
+    var s = 0;
+    for (let i = 0; i < l.length; i++) {
+        s += l[i].weight * 100;
+    }
+    return s;
 }
 // #endregion
 
 //#region Updates
+function updateInv() {
+    for (let i = 0; i < player.inventory.length; i++) {
+        if (player.inventory[i] != null) {
+            document.getElementById("slot" + (i+1)).innerText = player.inventory[i].name;
+        } else {
+            document.getElementById("slot" + (i+1)).innerText = "-";
+        }
+    }
+}
+
 function updateStats() {
     stats_name.innerText = player.name;
     stats_health.innerText = "Health: " + player.maxHealth + "/" + player.health;
@@ -85,6 +108,7 @@ function updateStats() {
     } else {
         stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 8;
     }
+    updateInv();
     display_floor.innerText = "Floor " + floor;
     // Effects...
 }
@@ -96,8 +120,7 @@ function loadText(text) {
 
 // #region Generation
 function randomEvent() {
-    // Testing only
-    var events = JSON_events;
+    var events = JSON_events.events;
     var n = RNG(1, sum(events));
     var i = -1;
 

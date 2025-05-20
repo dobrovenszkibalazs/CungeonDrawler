@@ -1,19 +1,22 @@
-[
-    {
-        "name": "nothing",
-        "text": ["Nothing ever happens", "Nothing happened...", "Nothin xd"],
-        "weight": 1
-    },
+{
+    "events":
+    [
+        {
+            "name": "nothing",
+            "text": ["Nothing ever happens", "Nothing happened...", "Nothin xd"],
+            "weight": 1
+        },
 
-    {
-        "name": "floorLoot",
-        "text": ["You found something", "jaaaaaaaaaaaaaaj talaltal valamit mano!"],
-        "weight": 0.5
-    },
+        {
+            "name": "floorLoot",
+            "text": ["You found something", "jaaaaaaaaaaaaaaj talaltal valamit mano!"],
+            "weight": 0.5
+        },
 
-    {
-        "name": "chest",
-        "text": ["ladaaaaaaaaaa", "you just found a chest... yay"],
-        "weight": 0.1
-    }
-]
+        {
+            "name": "chest",
+            "text": ["ladaaaaaaaaaa", "you just found a chest... yay"],
+            "weight": 0.1
+        }
+    ]
+}
