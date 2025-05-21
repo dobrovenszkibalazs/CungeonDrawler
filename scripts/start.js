@@ -141,11 +141,11 @@ function generateMonsters(m) {
     while (i < 99) {
         if (canGenerate(i+1)) {
             if (RNG(1,2) == 1) {
-                map[i][RNG(1,map[i].length-1)] = "monster... how should I feel?";
+                map[i][RNG(1,map[i].length-1)] = "monster";
                 i += 2;
             } else {
                 i += 1;
-                map[i][RNG(1,map[i].length-1)] = "monster... how should I feel?";
+                map[i][RNG(1,map[i].length-1)] = "monster";
                 i += 1;
             }
         } else {
@@ -199,7 +199,7 @@ function start() {
     main.style.display = "grid";
     player.name = nameBox.value;
     playerReset();
-    var map = generateLevel();
+    map = generateLevel();
     loadText("Teszt Teszt Teszt!")
     console.log(map);
 }
