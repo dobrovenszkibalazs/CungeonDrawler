@@ -1,3 +1,21 @@
 {
-    
+    "bandage": {
+        "name": "Bandage",
+        "heal": 30,
+        "canDrop": true
+    },
+    "smallHealthPotion": {
+        "name": "Small Health Potion",
+        "heal": 40,
+        "canDrop": true
+    },
+    "stick": {
+        "name": "Stick",
+        "lowDmg": 9,
+        "highDmg": 11,
+        "criticalChance": 0,
+        "criticalDmg": 0,
+        "special": [],
+        "canDrop": false
+    }
 }

@@ -38,14 +38,17 @@ const player = {
 };
 
 var JSON_events;
+var JSON_items;
 async function JSON_tweak() {
     try {
         JSON_events = await fetchJSON("events");
+        JSON_items = await fetchJSON("items");
     } catch (error) {
         console.error('Error:', error);
     }
 }
 JSON_tweak();
+
 var floor = 1;
 var stage = 1;
 var map = [];
@@ -86,13 +89,22 @@ function sum(l) {
 
 //#region Updates
 function updateInv() {
+    if (player.hasBackpack) {
+        stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 10;
+    } else {
+        stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 8;
+    }
     for (let i = 0; i < player.inventory.length; i++) {
         if (player.inventory[i] != null) {
-            document.getElementById("slot" + (i+1)).innerText = player.inventory[i].name;
+            document.getElementById("slot" + (i+1)).innerText = JSON_items[player.inventory[i]].name;
         } else {
             document.getElementById("slot" + (i+1)).innerText = "-";
         }
     }
+}
+
+function updateFloor() {
+    display_floor.innerText = "Floor " + floor;
 }
 
 function updateStats() {
@@ -103,13 +115,8 @@ function updateStats() {
     stats_armor.innerText = "Armor: " + player.armor;
     stats_resistance.innerText = "Resistance: " + parseInt(player.resistance * 10);
     stats_speed.innerText = "Speed: " + parseInt(player.speed * 10);
-    if (player.hasBackpack) {
-        stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 10;
-    } else {
-        stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 8;
-    }
+    updateFloor();
     updateInv();
-    display_floor.innerText = "Floor " + floor;
     // Effects...
 }
 
