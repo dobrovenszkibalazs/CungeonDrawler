@@ -1,10 +1,11 @@
+//#region Variables
 var gameState = "advancable";
 var pickUpItem = null;
 var btn1_eventId = advance;
 var btn2_eventId;
 var btn3_eventId;
-
 button1.addEventListener("click", advance);
+//#endregion
 //#region Tools
 function nextStage() {
     stage++;

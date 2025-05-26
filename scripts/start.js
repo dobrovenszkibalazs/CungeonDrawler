@@ -52,6 +52,10 @@ JSON_tweak();
 var floor = 1;
 var stage = 0;
 var map = [];
+var currText;
+var currTextFull;
+var textAnimIndex = 0;
+var textAnimId;
 // #endregion
 // #region Ignore (Initialization)
 main.style.display = "none";
@@ -117,8 +121,22 @@ function updateStats() {
     // Effects...
 }
 
+function textAnim() {
+    currText += currTextFull[textAnimIndex];
+    textBox.innerText = "→ " + currText;
+    textAnimIndex++;
+    if (textAnimIndex >= currTextFull.length) clearInterval(textAnimId);
+}
+
 function loadText(text) {
-    textBox.innerText = "→ " + text;
+    textBox.innerText = "→ ";
+    currText = "";
+    currTextFull = text;
+    textAnimIndex = 0;
+    if (textAnimId != null) {
+        clearInterval(textAnimId);
+    }
+    textAnimId = setInterval(textAnim, 30);
 }
 // #endregion
 // #region Generation
@@ -204,7 +222,7 @@ function start() {
     player.name = nameBox.value;
     playerReset();
     map = generateLevel();
-    loadText("Teszt Teszt Teszt!")
+    loadText("Welcome!")
     console.log(map);
 }
 // #endregion
