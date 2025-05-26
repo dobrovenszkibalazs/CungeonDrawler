@@ -5,6 +5,9 @@ var btn1_eventId = advance;
 var btn2_eventId;
 var btn3_eventId;
 button1.addEventListener("click", advance);
+for (const e of stats_inventory.children) {
+    e.addEventListener("click", clickItem);
+}
 //#endregion
 //#region Tools
 function nextStage() {
@@ -34,7 +37,12 @@ function loot(s) {
 //#endregion
 //#region Inventory
 function invFull() {
-    loadText("Your inventory is full...");
+    loadText("Your inventory is full... Pick an item to eldobni...!");
+    btnText("Nevermind", null, null);
+    button1.removeEventListener("click", btn1_eventId);
+    button2.removeEventListener("click", btn2_eventId);
+    button1.addEventListener("click", event_lootIgnore, {once:true});
+    btn1_eventId = event_lootIgnore;
 }
 
 function addItem() {
@@ -46,6 +54,7 @@ function addItem() {
     }
 
     if (i < n) {
+        gameState = "added item";
         player.inventory[i] = pickUpItem;
         loadText("You picked up the following item: " + JSON_items[pickUpItem].name + ".");
         btnText("Advance", null, null);
@@ -54,7 +63,27 @@ function addItem() {
         btn1_eventId = advance;
         updateInv();
     } else {
+        gameState = "inv full";
         invFull();
+    }
+}
+
+function clickItem() {
+    var curr = Array.prototype.slice.call(stats_inventory.children).indexOf(this);
+    if (gameState == "inv full") {
+        gameState = "added item";
+        player.inventory[curr] = pickUpItem;
+        loadText("You picked up the following item: " + JSON_items[pickUpItem].name + ".");
+        btnText("Advance", null, null);
+        button1.removeEventListener("click", btn1_eventId);
+        button1.addEventListener("click", advance, {once:true});
+        btn1_eventId = advance;
+        updateInv();
+    } else {
+        if (player.inventory[curr] != null) {
+            var item = JSON_items[player.inventory[curr]];
+            console.log(item.name);
+        }
     }
 }
 //#endregion
@@ -102,6 +131,15 @@ function event_floorLoot2() {
 }
 //#endregion
 //#region Events/chest
+//#region Events/monster
+function event_monster() {
+    gameState = "monster";
+    btnText("Fight!", "Flee!", null);
+    loadText("Monster!!!! How should I feeeel??");
+    button1.addEventListener("click", advance, {once:true});
+    btn1_eventId = advance;
+}
+//#endregion
 function event_chest1() {
     gameState = "chest1";
     loadText(JSON_events.events[2].text[RNG(0,JSON_events.events[2].text.length-1)]);
@@ -131,6 +169,6 @@ function loadStage() {
     } else if (curr == "chest") {
         event_chest1();
     } else if (curr == "monster") {
-        textBox.innerText = "Monster!!!!!!";
+        event_monster();
     }
 }
