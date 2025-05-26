@@ -50,15 +50,13 @@ async function JSON_tweak() {
 JSON_tweak();
 
 var floor = 1;
-var stage = 1;
+var stage = 0;
 var map = [];
 // #endregion
-
 // #region Ignore (Initialization)
 main.style.display = "none";
 menu.style.display = "block";
 // #endregion
-
 // #region Tools
 function fetchJSON(fn) {
     return fetch('http://127.0.0.1:5500/JSON/' + fn + '.json')
@@ -86,7 +84,6 @@ function sum(l) {
     return s;
 }
 // #endregion
-
 //#region Updates
 function updateInv() {
     if (player.hasBackpack) {
@@ -124,7 +121,6 @@ function loadText(text) {
     textBox.innerText = "→ " + text;
 }
 // #endregion
-
 // #region Generation
 function randomEvent() {
     var events = JSON_events.events;
@@ -181,7 +177,6 @@ function generateLevel() {
     return map;
 }
 // #endregion
-
 // #region Start/Reset
 function playerReset() {
     player.weapon = "Stick";
@@ -204,6 +199,8 @@ function start() {
     if (nameBox.value == "" || nameBox.value.length > 20 || nameBox.value.length < 4) return -1;
     menu.style.display = "none";
     main.style.display = "grid";
+    stage = 0;
+    floor = 1;
     player.name = nameBox.value;
     playerReset();
     map = generateLevel();

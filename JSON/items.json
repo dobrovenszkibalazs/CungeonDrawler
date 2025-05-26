@@ -2,20 +2,28 @@
     "bandage": {
         "name": "Bandage",
         "heal": 30,
-        "canDrop": true
+        "drop": "floorLoot1"
     },
     "smallHealthPotion": {
         "name": "Small Health Potion",
         "heal": 40,
-        "canDrop": true
+        "drop": "floorLoot1"
     },
-    "stick": {
-        "name": "Stick",
-        "lowDmg": 9,
-        "highDmg": 11,
-        "criticalChance": 0,
-        "criticalDmg": 0,
+    "oldKatana": {
+        "name": "Old Katana",
+        "lowDmg": 15,
+        "highDmg": 17,
+        "criticalChance": 0.25,
+        "criticalDmg": 1.5,
         "special": [],
-        "canDrop": false
+        "drop": "chest1"
+    },
+    "oldKnightArmor": {
+        "name": "Old Knight Armor",
+        "health": 35,
+        "Resistance": 1.25,
+        "Speed": 0.8,
+        "special": [],
+        "drop": "chest1"
     }
 }
