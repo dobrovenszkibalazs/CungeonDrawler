@@ -1,13 +1,57 @@
 {
     "bandage": {
         "name": "Bandage",
-        "heal": 30,
-        "drop": "floorLoot1"
+        "heal": 25,
+        "drop": "floorLoot1",
+        "type": "heal"
     },
-    "smallHealthPotion": {
-        "name": "Small Health Potion",
+    "smallPotion": {
+        "name": "Small Potion",
         "heal": 40,
-        "drop": "floorLoot1"
+        "drop": "floorLoot1",
+        "type": "heal"
+    },
+    "mysteriousPotion": {
+        "name": "Mysterious Potion",
+        "heal": 60,
+        "drop": "chest1",
+        "type": "heal"
+    },
+    "bigPotion": {
+        "name": "Big Potion",
+        "heal": 80,
+        "drop": null,
+        "type": "heal"
+    },
+    "stick": {
+        "name": "Stick",
+        "lowDmg": 8,
+        "highDmg": 10,
+        "criticalChance": 0,
+        "criticalDmg": 0,
+        "special": [],
+        "drop": null,
+        "type": "weapon"
+    },
+    "rustyDagger": {
+        "name": "Rusty Dagger",
+        "lowDmg": 12,
+        "highDmg": 13,
+        "criticalChance": 0,
+        "criticalDmg": 0,
+        "special": [],
+        "drop": "floorLoot1",
+        "type": "weapon"
+    },
+    "rustyShortsword": {
+        "name": "Rusty Shortsword",
+        "lowDmg": 11,
+        "highDmg": 16,
+        "criticalChance": 0,
+        "criticalDmg": 0,
+        "special": [],
+        "drop": "floorLoot1",
+        "type": "weapon"
     },
     "oldKatana": {
         "name": "Old Katana",
@@ -16,14 +60,53 @@
         "criticalChance": 0.25,
         "criticalDmg": 1.5,
         "special": [],
-        "drop": "chest1"
+        "drop": "chest1",
+        "type": "weapon"
+    },
+    "splittingAxe": {
+        "name": "Splitting Axe",
+        "lowDmg": 13,
+        "highDmg": 16,
+        "criticalChance": 0.25,
+        "criticalDmg": 2.0,
+        "special": [],
+        "drop": null,
+        "type": "weapon"
+    },
+    "tornChestplate": {
+        "name": "Torn Chestplate",
+        "health": 20,
+        "resistance": 1.1,
+        "speed": 0.9,
+        "special": [],
+        "drop": "floorLoot1",
+        "type": "armor"
+    },
+    "oldRobe": {
+        "name": "Old Robe",
+        "health": 10,
+        "resistance": 1.0,
+        "speed": 1.2,
+        "special": [],
+        "drop": "floorLoot1",
+        "type": "armor"
     },
     "oldKnightArmor": {
         "name": "Old Knight Armor",
         "health": 35,
-        "Resistance": 1.25,
-        "Speed": 0.8,
+        "resistance": 1.25,
+        "speed": 0.8,
         "special": [],
-        "drop": "chest1"
+        "drop": "chest1",
+        "type": "armor"
+    },
+    "mageRobe": {
+        "name": "Mage Robe",
+        "health": 15,
+        "resistance": 1.1,
+        "speed": 1.5,
+        "special": [],
+        "drop": null,
+        "type": "armor"
     }
 }

@@ -35,6 +35,20 @@ function loot(s) {
     return l[RNG(0, l.length-1)];
 }
 //#endregion
+//#region Combat
+function damage(amount, trueDamage=false) {
+    if (trueDamage) {
+        player.health -= amount;
+    } else {
+        player.health -= amount / player.resistance;
+    }
+}
+
+function heal(n) {
+    player.health += n;
+    if (player.health > player.maxHealth) player.health = player.maxHealth;
+}
+//#endregion
 //#region Inventory
 function invFull() {
     loadText("Your inventory is full... Pick an item to eldobni...!");
@@ -82,8 +96,25 @@ function clickItem() {
     } else {
         if (player.inventory[curr] != null) {
             var item = JSON_items[player.inventory[curr]];
-            console.log(item.name);
+            if (item.type == "heal") {
+                if (item.name == "Mysterious Potion") {
+                    if (RNG(1,2) == 1) {heal(item.heal);} else {damage(item.heal/2, true);}
+                } else {
+                    heal(item.heal);
+                }
+                player.inventory[curr] = null;
+            } else if (item.type == "weapon") {
+                let v = player.weapon;
+                player.weapon = player.inventory[curr];
+                player.inventory[curr] = v;
+            } else if (item.type == "armor") {
+                let v = player.armor;
+                player.armor = player.inventory[curr];
+                player.inventory[curr] = v;
+                calcStats();
+            }
         }
+        updateStats();
     }
 }
 //#endregion
@@ -130,7 +161,6 @@ function event_floorLoot2() {
     btn1_eventId = addItem;
 }
 //#endregion
-//#region Events/chest
 //#region Events/monster
 function event_monster() {
     gameState = "monster";
@@ -140,6 +170,7 @@ function event_monster() {
     btn1_eventId = advance;
 }
 //#endregion
+//#region Events/chest
 function event_chest1() {
     gameState = "chest1";
     loadText(JSON_events.events[2].text[RNG(0,JSON_events.events[2].text.length-1)]);

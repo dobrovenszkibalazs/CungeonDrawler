@@ -76,8 +76,8 @@ function fetchJSON(fn) {
         });
 }
 
-function RNG(min, max) {
-    return Math.floor(Math.random()*(max-min+1)+min);
+function RNG(min,max) {
+    return Math.floor(Math.random()*(max-min+1))+min;
 }
 
 function sum(l) {
@@ -88,7 +88,7 @@ function sum(l) {
     return s;
 }
 // #endregion
-//#region Updates
+// #region Updates
 function updateInv() {
     if (player.hasBackpack) {
         stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 10;
@@ -108,12 +108,26 @@ function updateFloor() {
     display_floor.innerText = "Floor " + floor;
 }
 
+function calcStats() {
+    if (player.armor != null) {
+        player.resistance = JSON_items[player.armor].resistance;
+        let prevMaxHp = player.maxHealth;
+        player.maxHealth = 100 + JSON_items[player.armor].health;
+        if (player.health == prevMaxHp) player.health = player.maxHealth;
+        player.speed = JSON_items[player.armor].speed;
+    }
+}
+
 function updateStats() {
     stats_name.innerText = player.name;
-    stats_health.innerText = "Health: " + player.maxHealth + "/" + player.health;
+    stats_health.innerText = "Health: " + player.health + "/" + player.maxHealth;
     stats_money.innerText = "Money: " + player.money + "$";
-    stats_weapon.innerText = "Weapon: " + player.weapon;
-    stats_armor.innerText = "Armor: " + player.armor;
+    stats_weapon.innerText = "Weapon: " + JSON_items[player.weapon].name;
+    if (player.armor != null) {
+        stats_armor.innerText = "Armor: " + JSON_items[player.armor].name;
+    } else {
+        stats_armor.innerText = "Armor: -";
+    }
     stats_resistance.innerText = "Resistance: " + parseInt(player.resistance * 10);
     stats_speed.innerText = "Speed: " + parseInt(player.speed * 10);
     updateFloor();
@@ -197,8 +211,8 @@ function generateLevel() {
 // #endregion
 // #region Start/Reset
 function playerReset() {
-    player.weapon = "Stick";
-    player.armor = "-";
+    player.weapon = "stick";
+    player.armor = null;
     player.hasBackpack = false;
     player.resistance = 1.0;
     player.speed = 1.0;
