@@ -173,14 +173,14 @@ function canGenerate(n) {
 function generateMonsters(m) {
     var map = m;
     var i = 1;
-    while (i < 99) {
+    while (i < 19) {
         if (canGenerate(i+1)) {
             if (RNG(1,2) == 1) {
                 map[i][RNG(1,map[i].length-1)] = "monster";
                 i += 2;
             } else {
                 i += 1;
-                map[i][RNG(1,map[i].length-1)] = "monster";
+                if (i < 19) map[i][RNG(1,map[i].length-1)] = "monster";
                 i += 1;
             }
         } else {
@@ -193,14 +193,18 @@ function generateMonsters(m) {
 function generateLevel() {
     var map = [];
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 20; i++) {
         var currFloor = [];
         if (canGenerate(i+1)) {
             for (let j = 0; j < RNG(4,6); j++) {
                 currFloor[j] = randomEvent();
             }
         } else {
-            currFloor[0] = "Shop";
+            if (i+1 == 10) {
+                currFloor[0] = "Shop";
+            } else if (i+1 == 20) {
+                currFloor[0] = "Boss";
+            }
         }
         map[i] = currFloor;
     }
