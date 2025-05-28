@@ -1,6 +1,7 @@
 //#region Variables
 var gameState = "advancable";
 var pickUpItem = null;
+var sellable = null;
 var btn1_eventId = advance;
 var btn2_eventId;
 var btn3_eventId;
@@ -34,6 +35,24 @@ function loot(s) {
     }
     return l[RNG(0, l.length-1)];
 }
+
+function btnEvents(btn1, btn2, btn3) {
+    button1.removeEventListener("click", btn1_eventId);
+    button2.removeEventListener("click", btn2_eventId);
+    button3.removeEventListener("click", btn3_eventId);
+    if (btn1 != null) {
+        button1.addEventListener("click", btn1);
+        btn1_eventId = btn1;
+    }
+    if (btn2 != null) {
+        button2.addEventListener("click", btn2);
+        btn2_eventId = btn2;
+    }
+    if (btn3 != null) {
+        button3.addEventListener("click", btn3);
+        btn3_eventId = btn3;
+    }
+}
 //#endregion
 //#region Combat
 function damage(amount, trueDamage=false) {
@@ -53,10 +72,12 @@ function heal(n) {
 function invFull() {
     loadText("Your inventory is full... Pick an item to eldobni...!");
     btnText("Nevermind", null, null);
-    button1.removeEventListener("click", btn1_eventId);
-    button2.removeEventListener("click", btn2_eventId);
-    button1.addEventListener("click", event_lootIgnore, {once:true});
-    btn1_eventId = event_lootIgnore;
+    if (gameState != "buying") {
+        btnEvents(event_lootIgnore, null, null);
+        gameState = "inv full";
+    } else {
+        btnEvents(shopBrowse, null, null);
+    }
 }
 
 function addItem() {
@@ -68,31 +89,43 @@ function addItem() {
     }
 
     if (i < n) {
+        if (gameState != "buying") {
+            loadText("You picked up the following item: " + JSON_items[pickUpItem].name);
+            btnText("Advance", null, null);
+            btnEvents(advance, null, null);
+        } else {
+            loadText("You bought the following item: " + JSON_items[pickUpItem].name);
+            btnText("Continue", null, null);
+            btnEvents(shopBrowse, null, null);
+        }
         gameState = "added item";
         player.inventory[i] = pickUpItem;
-        loadText("You picked up the following item: " + JSON_items[pickUpItem].name + ".");
-        btnText("Advance", null, null);
-        button2.removeEventListener("click", btn2_eventId);
-        button1.addEventListener("click", advance, {once:true});
-        btn1_eventId = advance;
         updateInv();
     } else {
-        gameState = "inv full";
         invFull();
     }
 }
 
 function clickItem() {
     var curr = Array.prototype.slice.call(stats_inventory.children).indexOf(this);
-    if (gameState == "inv full") {
-        gameState = "added item";
+    if (gameState == "inv full" || gameState == "buying") {
         player.inventory[curr] = pickUpItem;
-        loadText("You picked up the following item: " + JSON_items[pickUpItem].name + ".");
-        btnText("Advance", null, null);
-        button1.removeEventListener("click", btn1_eventId);
-        button1.addEventListener("click", advance, {once:true});
-        btn1_eventId = advance;
+        if (gameState != "buying") {
+            loadText("You picked up the following item: " + JSON_items[pickUpItem].name + ".");
+            btnText("Advance", null, null);
+            btnEvents(advance, null, null);
+        } else {
+            loadText("You bought the following item: " + JSON_items[pickUpItem].name + ".");
+            btnText("Continue", null, null);
+            btnEvents(shopBrowse, null, null);
+        }
+        gameState = "added item";
         updateInv();
+    } else if (gameState == "sell" && player.inventory[curr] != null) {
+        sellable = curr;
+        loadText("Would you like to sell this item for " + JSON_items[player.inventory[curr]].sellPrice + "$?");
+        btnText("Sell", "Nevermind", null);
+        btnEvents(sellConfirm, shopBrowse, null);
     } else {
         if (player.inventory[curr] != null) {
             var item = JSON_items[player.inventory[curr]];
@@ -121,9 +154,8 @@ function clickItem() {
 //#region Events/nothing
 function event_nothing() {
     btnText("Advance", null, null);
+    btnEvents(advance, null, null);
     loadText(JSON_events.events[0].text[RNG(0,JSON_events.events[0].text.length-1)]);
-    button1.addEventListener("click", advance, {once:true});
-    btn1_eventId = advance;
 }
 
 function advance() {
@@ -136,38 +168,30 @@ function event_floorLoot1() {
     gameState = "floorLoot1";
     loadText(JSON_events.events[1].text[RNG(0,JSON_events.events[1].text.length-1)]);
     btnText("Continue", "Ignore", null);
-    button1.removeEventListener("click", btn1_eventId);
-    button1.addEventListener("click", event_floorLoot2, {once:true});
-    button2.addEventListener("click", event_lootIgnore, {once:true});
-    btn1_eventId = event_floorLoot2;
-    btn2_eventId = event_lootIgnore;
+    btnEvents(event_floorLoot2, event_lootIgnore, null);
 }
 
 function event_lootIgnore() {
     gameState = "advancable";
     loadText("you decided to leave.. was it really worth it, though?");
     btnText("Advance", null, null);
-    button1.removeEventListener("click", btn1_eventId);
-    button1.addEventListener("click", advance, {once:true});
-    btn1_eventId = advance;
+    btnEvents(advance, null, null);
 }
 
 function event_floorLoot2() {
     gameState = "floorLoot2";
     btnText("Pick up", "Ignore", null);
+    btnEvents(addItem, event_lootIgnore, null);
     pickUpItem = loot("floorLoot1");
     loadText("you have found the following item: " + JSON_items[pickUpItem].name);
-    button1.addEventListener("click", addItem, {once:true});
-    btn1_eventId = addItem;
 }
 //#endregion
 //#region Events/monster
 function event_monster() {
     gameState = "monster";
     btnText("Fight!", "Flee!", null);
+    btnEvents(advance, null, null);
     loadText("Monster!!!! How should I feeeel??");
-    button1.addEventListener("click", advance, {once:true});
-    btn1_eventId = advance;
 }
 //#endregion
 //#region Events/chest
@@ -175,20 +199,104 @@ function event_chest1() {
     gameState = "chest1";
     loadText(JSON_events.events[2].text[RNG(0,JSON_events.events[2].text.length-1)]);
     btnText("Continue", "Ignore", null);
-    button1.removeEventListener("click", btn1_eventId);
-    button1.addEventListener("click", event_chest2, {once:true});
-    button2.addEventListener("click", event_lootIgnore, {once:true});
-    btn1_eventId = event_floorLoot2;
-    btn2_eventId = event_lootIgnore;
+    btnEvents(event_chest2, event_lootIgnore, null);
 }
 
 function event_chest2() {
     gameState = "chest2";
     btnText("Pick up", "Ignore", null);
+    btnEvents(addItem, event_lootIgnore, null);
     pickUpItem = loot("chest1");
     loadText("you have opened the following item: " + JSON_items[pickUpItem].name);
-    button1.addEventListener("click", addItem, {once:true});
-    btn1_eventId = addItem;
+}
+//#endregion
+//#region Events/shop
+var shop1 = [
+    "bandage", "smallPotion", "smallPotion", "bandage",
+    "smallPotion", "bigPotion", "bigPotion", "backpack",
+    "mysteriousPotion", "mageRobe", "splittingAxe", "mysteriousPotion"
+];
+
+function loadShop() {
+    display_enemy1_hp.style.display = "none";
+    display_enemy2_hp.style.display = "none";
+    display_enemy3_hp.style.display = "none";
+    display_enemy1_sprite.style.display = "none";
+    display_enemy2_sprite.style.display = "none";
+    display_enemy3_sprite.style.display = "none";
+    for (let i = 0; i < 12; i++) {
+        shopItems[i].querySelector("p").innerText = JSON_items[shop1[i]].name;
+    }
+    shop.style.display = "grid";
+    shopTitle.style.display = "";
+    shopBrowse();
+}
+
+function exitShop() {
+    display_enemy1_hp.style.display = "";
+    display_enemy2_hp.style.display = "";
+    display_enemy3_hp.style.display = "";
+    display_enemy1_sprite.style.display = "";
+    display_enemy2_sprite.style.display = "";
+    display_enemy3_sprite.style.display = "";
+    shop.style.display = "none";
+    shopTitle.style.display = "none";
+    pickItem = null;
+    advance();
+}
+
+function shopBrowse() {
+    gameState = "shop browse";
+    sellable = null;
+    loadText("Welcome to the Shop... Buy.");
+    btnText(null, "Leave", "Sell");
+    btnEvents(null, exitShop, sell);
+    for (const e of shopItems) {
+        e.addEventListener("click", pickItem);
+    }
+}
+
+function pickItem() {
+    if (gameState == "shop browse") {
+        let item = shop1[Array.prototype.slice.call(shopItems).indexOf(this)];
+        pickUpItem = item;
+        gameState = "buying";
+        loadText("Would you like to buy the next item?: " + JSON_items[item].name + " (" + JSON_items[item].buyPrice + "$)");
+        btnText("Buy", "Nevermind", null);
+        btnEvents(buy, shopBrowse, null);
+    }
+}
+
+function buy() {
+    if (player.money >= JSON_items[pickUpItem].buyPrice) {
+        player.money -= JSON_items[pickUpItem].buyPrice;
+        updateStats();
+        addItem();
+    } else {
+        gameState = "broke";
+        loadText("You don't have enough money... you should probably get a job or something");
+        btnText("Continue", null, null);
+        btnEvents(shopBrowse, null, null);
+    }
+}
+
+function sell() {
+    gameState = "sell";
+    loadText("Pick an item to sell.");
+    btnText("Nevermind", null, null);
+    btnEvents(shopBrowse, null, null);
+}
+
+function sellConfirm() {
+    if (sellable != null) {
+        gameState = "sold";
+        player.money += JSON_items[player.inventory[sellable]].sellPrice;
+        player.inventory[sellable] = null;
+        updateStats();
+        loadText("Muchas gracias!");
+        btnText("Continue", null, null);
+        btnEvents(shopBrowse, null, null);
+    }
 }
 //#endregion
 function loadStage() {
@@ -201,5 +309,7 @@ function loadStage() {
         event_chest1();
     } else if (curr == "monster") {
         event_monster();
+    } else if (curr == "shop") {
+        loadShop();
     }
 }

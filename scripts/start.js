@@ -10,6 +10,9 @@ const display_enemy3_hp = document.getElementById("enemyHealth3");
 const display_enemy1_sprite = document.getElementById("enemyDisplay1");
 const display_enemy2_sprite = document.getElementById("enemyDisplay2");
 const display_enemy3_sprite = document.getElementById("enemyDisplay3");
+const shopTitle = document.getElementById("shopTitle");
+const shop = document.getElementById("shop");
+const shopItems = document.getElementsByClassName("shopItem");
 const textBox = document.getElementById("textDialogue");
 const button1 = document.getElementById("button1");
 const button2 = document.getElementById("button2");
@@ -201,9 +204,9 @@ function generateLevel() {
             }
         } else {
             if (i+1 == 10) {
-                currFloor[0] = "Shop";
+                currFloor[0] = "shop";
             } else if (i+1 == 20) {
-                currFloor[0] = "Boss";
+                currFloor[0] = "boss";
             }
         }
         map[i] = currFloor;
@@ -235,6 +238,8 @@ function start() {
     if (nameBox.value == "" || nameBox.value.length > 20 || nameBox.value.length < 4) return -1;
     menu.style.display = "none";
     main.style.display = "grid";
+    shopTitle.style.display = "none";
+    shop.style.display = "none";
     stage = 0;
     floor = 1;
     player.name = nameBox.value;

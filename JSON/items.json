@@ -3,25 +3,33 @@
         "name": "Bandage",
         "heal": 25,
         "drop": "floorLoot1",
-        "type": "heal"
+        "type": "heal",
+        "buyPrice": 10,
+        "sellPrice": 5
     },
     "smallPotion": {
         "name": "Small Potion",
         "heal": 40,
         "drop": "floorLoot1",
-        "type": "heal"
+        "type": "heal",
+        "buyPrice": 20,
+        "sellPrice": 10
     },
     "mysteriousPotion": {
         "name": "Mysterious Potion",
         "heal": 60,
         "drop": "chest1",
-        "type": "heal"
+        "type": "heal",
+        "buyPrice": 25,
+        "sellPrice": 20
     },
     "bigPotion": {
         "name": "Big Potion",
         "heal": 80,
         "drop": null,
-        "type": "heal"
+        "type": "heal",
+        "buyPrice": 50,
+        "sellPrice": 25
     },
     "stick": {
         "name": "Stick",
@@ -31,7 +39,8 @@
         "criticalDmg": 0,
         "special": [],
         "drop": null,
-        "type": "weapon"
+        "type": "weapon",
+        "sellPrice": 1
     },
     "rustyDagger": {
         "name": "Rusty Dagger",
@@ -41,7 +50,8 @@
         "criticalDmg": 0,
         "special": [],
         "drop": "floorLoot1",
-        "type": "weapon"
+        "type": "weapon",
+        "sellPrice": 7
     },
     "rustyShortsword": {
         "name": "Rusty Shortsword",
@@ -51,7 +61,8 @@
         "criticalDmg": 0,
         "special": [],
         "drop": "floorLoot1",
-        "type": "weapon"
+        "type": "weapon",
+        "sellPrice": 8
     },
     "oldKatana": {
         "name": "Old Katana",
@@ -61,7 +72,8 @@
         "criticalDmg": 1.5,
         "special": [],
         "drop": "chest1",
-        "type": "weapon"
+        "type": "weapon",
+        "sellPrice": 20
     },
     "splittingAxe": {
         "name": "Splitting Axe",
@@ -71,7 +83,9 @@
         "criticalDmg": 2.0,
         "special": [],
         "drop": null,
-        "type": "weapon"
+        "type": "weapon",
+        "buyPrice": 100,
+        "sellPrice": 50
     },
     "tornChestplate": {
         "name": "Torn Chestplate",
@@ -80,7 +94,8 @@
         "speed": 0.9,
         "special": [],
         "drop": "floorLoot1",
-        "type": "armor"
+        "type": "armor",
+        "sellPrice": 8
     },
     "oldRobe": {
         "name": "Old Robe",
@@ -89,7 +104,8 @@
         "speed": 1.2,
         "special": [],
         "drop": "floorLoot1",
-        "type": "armor"
+        "type": "armor",
+        "sellPrice": 7
     },
     "oldKnightArmor": {
         "name": "Old Knight Armor",
@@ -98,7 +114,8 @@
         "speed": 0.8,
         "special": [],
         "drop": "chest1",
-        "type": "armor"
+        "type": "armor",
+        "sellPrice": 25
     },
     "mageRobe": {
         "name": "Mage Robe",
@@ -107,6 +124,23 @@
         "speed": 1.5,
         "special": [],
         "drop": null,
-        "type": "armor"
+        "type": "armor",
+        "buyPrice": 100,
+        "sellPrice": 50
+    },
+    "smallGemstone": {
+        "name": "Small Gemstone",
+        "drop": "floorLoot1",
+        "sellPrice": 20
+    },
+    "rareCrystal": {
+        "name": "Rare Crystal",
+        "drop": "chest1",
+        "sellPrice": 50
+    },
+    "backpack": {
+        "name": "Backpack",
+        "drop": null,
+        "buyPrice": 75
     }
 }
