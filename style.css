@@ -53,6 +53,11 @@ p, div, h1 {
     border: 5px solid white;
     text-align: center;
     width: 80%;
+    font-size: large;
+}
+
+.hidden {
+    display: none;
 }
 /* #endregion */
 /* #region Main Window */
@@ -124,7 +129,6 @@ p, div, h1 {
 }
 /* #endregion */
 /* #region Action Buttons */
-
 #actions {
     display: flex;
     flex-direction: row;
@@ -141,5 +145,4 @@ p, div, h1 {
 #actions div p {
     font-size: xx-large;
 }
-
 /* #endregion */

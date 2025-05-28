@@ -92,11 +92,20 @@ function sum(l) {
 }
 // #endregion
 // #region Updates
+function emptySpaces() {
+    let c = 8;
+    for (const e of player.inventory) {
+        if (e != null) c--;
+    }
+    if (player.hasBackpack) c += 2;
+    return c;
+}
+
 function updateInv() {
     if (player.hasBackpack) {
-        stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 10;
+        stats_inventorySpace.innerText = "Inventory slots: " + emptySpaces() + "/" + 10;
     } else {
-        stats_inventorySpace.innerText = "Inventory slots: " + player.inventory.length + "/" + 8;
+        stats_inventorySpace.innerText = "Inventory slots: " + emptySpaces() + "/" + 8;
     }
     for (let i = 0; i < player.inventory.length; i++) {
         if (player.inventory[i] != null) {
@@ -170,7 +179,7 @@ function randomEvent() {
 }
 
 function canGenerate(n) {
-    return n % 10 != 0; // Need to adjust later...
+    return n % 10 != 0;
 }
 
 function generateMonsters(m) {
@@ -228,9 +237,11 @@ function playerReset() {
     player.money = 0;
     player.inventory = [];
     player.effects = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
         player.inventory[i] = null;
     }
+    document.getElementById("slot9").classList = ["hidden"];
+    document.getElementById("slot10").classList = ["hidden"];
     updateStats();
 }
 

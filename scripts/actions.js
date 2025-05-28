@@ -186,6 +186,17 @@ function event_floorLoot2() {
     loadText("you have found the following item: " + JSON_items[pickUpItem].name);
 }
 //#endregion
+//#region Events/money
+function event_money() {
+    gameState = "money";
+    let m = RNG(20,28);
+    player.money += m;
+    loadText(JSON_events.events[3].text[RNG(0,1)] + " (" + m + "$)");
+    btnText("Advance", null, null);
+    btnEvents(advance, null, null);
+    updateStats();
+}
+//#endregion
 //#region Events/monster
 function event_monster() {
     gameState = "monster";
@@ -271,7 +282,17 @@ function buy() {
     if (player.money >= JSON_items[pickUpItem].buyPrice) {
         player.money -= JSON_items[pickUpItem].buyPrice;
         updateStats();
-        addItem();
+        if (JSON_items[pickUpItem].name != "Backpack") {
+            addItem();
+        } else {
+            player.hasBackpack = true;
+            document.getElementById("slot9").classList = [];
+            document.getElementById("slot10").classList = [];
+            updateStats();
+            loadText("From now on, you'll have 2 more spaces... yay");
+            btnText("Continue", null, null);
+            btnEvents(shopBrowse, null, null);
+        }
     } else {
         gameState = "broke";
         loadText("You don't have enough money... you should probably get a job or something");
@@ -281,10 +302,12 @@ function buy() {
 }
 
 function sell() {
-    gameState = "sell";
-    loadText("Pick an item to sell.");
-    btnText("Nevermind", null, null);
-    btnEvents(shopBrowse, null, null);
+    if ((emptySpaces() != 8 && player.hasBackpack == false) || (emptySpaces() != 10 && player.hasBackpack)) {
+        gameState = "sell";
+        loadText("Pick an item to sell.");
+        btnText("Nevermind", null, null);
+        btnEvents(shopBrowse, null, null);
+    }
 }
 
 function sellConfirm() {
@@ -305,6 +328,8 @@ function loadStage() {
         event_nothing();
     } else if (curr == "floorLoot") {
         event_floorLoot1();
+    } else if (curr == "money") {
+        event_money();
     } else if (curr == "chest") {
         event_chest1();
     } else if (curr == "monster") {

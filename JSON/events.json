@@ -17,6 +17,12 @@
             "name": "chest",
             "text": ["ladaaaaaaaaaa", "you just found a chest... yay"],
             "weight": 0.1
+        },
+
+        {
+            "name": "money",
+            "text": ["Penzt talaltal jaaaaaaa..", "money money money money money money money money"],
+            "weight": 0.2
         }
     ]
 }
