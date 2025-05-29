@@ -26,6 +26,8 @@ const stats_resistance = document.getElementById("plrResistance");
 const stats_speed = document.getElementById("plrSpeed");
 const stats_inventorySpace = document.getElementById("plrInventorySpace");
 const stats_inventory = document.getElementById("plrInventory");
+const winScreen = document.getElementById("winScreen");
+const loseScreen = document.getElementById("loseScreen");
 const player = {
     name:null,
     maxHealth:100,
@@ -65,6 +67,8 @@ var textAnimId;
 // #region Ignore (Initialization)
 main.style.display = "none";
 menu.style.display = "block";
+winScreen.style.display = "none";
+loseScreen.style.display = "none";
 // #endregion
 // #region Tools
 function fetchJSON(fn) {
@@ -254,6 +258,8 @@ function start() {
     main.style.display = "grid";
     shopTitle.style.display = "none";
     shop.style.display = "none";
+    winScreen.style.display = "none";
+    loseScreen.style.display = "none";
     stage = 0;
     floor = 1;
     player.name = nameBox.value;

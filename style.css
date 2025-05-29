@@ -1,5 +1,5 @@
 /* #region All */
-h1 {
+h1, h2 {
     text-align: center;
 }
 
@@ -29,6 +29,11 @@ img {
 
 #mainMenu {
     width: 25%;
+    margin: auto;
+    text-align: center;
+}
+
+#winScreen, #loseScreen {
     margin: auto;
     text-align: center;
 }

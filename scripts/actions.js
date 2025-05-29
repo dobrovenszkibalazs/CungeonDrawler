@@ -6,7 +6,8 @@ var monster = null;
 var btn1_eventId = advance;
 var btn2_eventId;
 var btn3_eventId;
-button1.addEventListener("click", advance);
+btnText("START", null, null);
+btnEvents(advance, null, null);
 for (const e of stats_inventory.children) {
     e.addEventListener("click", clickItem);
 }
@@ -102,6 +103,10 @@ function playerTurn() {
         btnText("Continue", null, null);
         btnEvents(monsterTurn, null, null);
     } else {
+        if (floor == 20) {
+            win();
+            return null;
+        } 
         let m = RNG(18,22);
         loadText("You eliminated " + monster.name + " and got " + m + "$.");
         player.money += m;
@@ -118,6 +123,10 @@ function monsterTurn() {
     if (dodge(player.speed, monster.speed) == false) {
         dmg = damage(dmg, "player");
         updateStats();
+        if (playerDeathCheck()) {
+            lose();
+            return null;
+        }
         loadText(monster.name + " hits you and does " + dmg + " damage!");
     } else {
         loadText(monster.name + " missed!");
@@ -317,6 +326,16 @@ function event_monster() {
     loadText("Oh no! You have encountered a/an " + monster.name + "!");
 }
 //#endregion
+//#region Events/boss
+function event_boss() {
+    gameState = "boss";
+    monster = JSON_enemies["boss"];
+    loadMonster();
+    btnText("Fight", null, null);
+    btnEvents(playerTurn, null, null);
+    loadText("The boss is here!! Fleeing is not an option anymore..");
+}
+//#endregion
 //#region Events/chest
 function event_chest1() {
     gameState = "chest1";
@@ -334,11 +353,12 @@ function event_chest2() {
 }
 //#endregion
 //#region Events/shop
-var shop1 = [
+var shop1_real = [
     "bandage", "smallPotion", "smallPotion", "bandage",
     "smallPotion", "bigPotion", "bigPotion", "backpack",
     "mysteriousPotion", "mageRobe", "splittingAxe", "mysteriousPotion"
 ];
+var shop1 = [];
 
 function loadShop() {
     display_enemy1_hp.style.display = "none";
@@ -348,6 +368,7 @@ function loadShop() {
     display_enemy2_sprite.style.display = "none";
     display_enemy3_sprite.style.display = "none";
     for (let i = 0; i < 12; i++) {
+        shop1[i] = shop1_real[i];
         shopItems[i].querySelector("p").innerText = JSON_items[shop1[i]].name;
     }
     shop.style.display = "grid";
@@ -440,6 +461,26 @@ function sellConfirm() {
     }
 }
 //#endregion
+//#region Win/Lose
+function win() {
+    btnText("START", null, null);
+    btnEvents(advance, null, null);
+    monster = null;
+    loadMonster();
+    main.style.display = "none";
+    winScreen.style.display = "block";
+}
+
+function lose() {
+    btnText("START", null, null);
+    btnEvents(advance, null, null);
+    monster = null;
+    loadMonster();
+    main.style.display = "none";
+    loseScreen.style.display = "block";
+}
+//#endregion
+//#region Stage Handler
 function loadStage() {
     var curr = map[floor-1][stage-1];
     if (curr == "nothing") {
@@ -454,5 +495,8 @@ function loadStage() {
         event_monster();
     } else if (curr == "shop") {
         loadShop();
+    } else if (curr == "boss") {
+        event_boss();
     }
 }
+//#endregion
