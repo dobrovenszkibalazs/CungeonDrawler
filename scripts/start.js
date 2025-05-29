@@ -265,7 +265,7 @@ function start() {
     player.name = nameBox.value;
     playerReset();
     map = generateLevel();
-    loadText("Welcome!")
+    loadText("Welcome! Press START to start")
     console.log(map);
 }
 // #endregion

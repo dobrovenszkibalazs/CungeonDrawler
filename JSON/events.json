@@ -3,25 +3,25 @@
     [
         {
             "name": "nothing",
-            "text": ["Nothing ever happens", "Nothing happened...", "Nothin xd"],
+            "text": ["Nothing ever happens.", "Nothing happened...", "You couldn't find anything..."],
             "weight": 1
         },
 
         {
             "name": "floorLoot",
-            "text": ["You found something", "jaaaaaaaaaaaaaaj talaltal valamit mano!"],
+            "text": ["You found something!", "Wait! There's something on the floor...!"],
             "weight": 0.5
         },
 
         {
             "name": "chest",
-            "text": ["ladaaaaaaaaaa", "you just found a chest... yay"],
+            "text": ["A chest!", "You've just encountered a chest...!"],
             "weight": 0.1
         },
 
         {
             "name": "money",
-            "text": ["Penzt talaltal jaaaaaaa..", "money money money money money money money money"],
+            "text": ["You've found some money laying on the ground...", "You've found someone's wallet on the ground..."],
             "weight": 0.2
         }
     ]

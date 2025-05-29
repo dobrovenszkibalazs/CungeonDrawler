@@ -51,11 +51,11 @@
         "name": "Boss",
         "maxHealth": 300,
         "health": 300,
-        "lowDmg": 10,
-        "highDmg": 9,
+        "lowDmg": 9,
+        "highDmg": 10,
         "resistance": 1.0,
         "speed": 1.1,
-        "sprite": "./sprites/enemies/birb.png",
+        "sprite": "./sprites/enemies/boss.png",
         "spawn": 99
     }
 }

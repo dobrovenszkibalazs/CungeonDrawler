@@ -72,7 +72,8 @@ function damage(amount, target, trueDamage=false) {
 }
 
 function dodge(spd1, spd2) {
-    return RNG(1,100) <= (spd1-spd2+0.2)*100;
+    let s = (spd1<=spd2+0.2) ? 0.2 : 0;
+    return RNG(1,100) <= (spd1-spd2+s)*100;
 }
 
 function RNG_damage(low, high, canCrit=false) {
@@ -97,7 +98,7 @@ function playerTurn() {
         updateMonsterHP();
         loadText("You successfully hit the "+ monster.name + " and did " + dmg + " damage!");
     } else {
-        loadText("You successfully missed xdd");
+        loadText("You missed!");
     }
     if (monsterDeathCheck() == false) {
         btnText("Continue", null, null);
@@ -145,7 +146,7 @@ function monsterDeathCheck() {
 //#endregion
 //#region Inventory
 function invFull() {
-    loadText("Your inventory is full... Pick an item to eldobni...!");
+    loadText("Your inventory is full... Pick an item to throw away...!");
     btnText("Nevermind", null, null);
     if (gameState != "buying") {
         btnEvents(event_lootIgnore, null, null);
@@ -207,6 +208,7 @@ function clickItem() {
             if (item.type == "heal") {
                 if (item.name == "Mysterious Potion") {
                     if (RNG(1,2) == 1) {heal(item.heal);} else {damage(item.heal/2, "player", true);}
+                    if (player.health <= 0) player.health = 1;
                 } else {
                     heal(item.heal);
                 }
@@ -248,7 +250,7 @@ function event_floorLoot1() {
 
 function event_lootIgnore() {
     gameState = "advancable";
-    loadText("you decided to leave.. was it really worth it, though?");
+    loadText("You decided to leave.. was it really worth it, though?");
     btnText("Advance", null, null);
     btnEvents(advance, null, null);
 }
@@ -258,7 +260,7 @@ function event_floorLoot2() {
     btnText("Pick up", "Ignore", null);
     btnEvents(addItem, event_lootIgnore, null);
     pickUpItem = loot("floorLoot1");
-    loadText("you have found the following item: " + JSON_items[pickUpItem].name);
+    loadText("You have found the following item: " + JSON_items[pickUpItem].name);
 }
 //#endregion
 //#region Events/money
@@ -323,7 +325,7 @@ function event_monster() {
     loadMonster();
     btnText("Fight", "Flee", null);
     btnEvents(playerTurn, flee, null);
-    loadText("Oh no! You have encountered a/an " + monster.name + "!");
+    loadText("Oh no! You have encountered a " + monster.name + "!");
 }
 //#endregion
 //#region Events/boss
@@ -349,7 +351,7 @@ function event_chest2() {
     btnText("Pick up", "Ignore", null);
     btnEvents(addItem, event_lootIgnore, null);
     pickUpItem = loot("chest1");
-    loadText("you have opened the following item: " + JSON_items[pickUpItem].name);
+    loadText("You have opened the following item: " + JSON_items[pickUpItem].name);
 }
 //#endregion
 //#region Events/shop
@@ -434,7 +436,7 @@ function buy() {
         }
     } else {
         gameState = "broke";
-        loadText("You don't have enough money... you should probably get a job or something");
+        loadText("You don't have enough money...");
         btnText("Continue", null, null);
         btnEvents(shopBrowse, null, null);
     }
