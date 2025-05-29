@@ -42,10 +42,12 @@ const player = {
 
 var JSON_events;
 var JSON_items;
+var JSON_enemies;
 async function JSON_tweak() {
     try {
         JSON_events = await fetchJSON("events");
         JSON_items = await fetchJSON("items");
+        JSON_enemies = await fetchJSON("enemies");
     } catch (error) {
         console.error('Error:', error);
     }
@@ -131,6 +133,7 @@ function calcStats() {
 }
 
 function updateStats() {
+    if (player.health < 0) player.health = 0;
     stats_name.innerText = player.name;
     stats_health.innerText = "Health: " + player.health + "/" + player.maxHealth;
     stats_money.innerText = "Money: " + player.money + "$";

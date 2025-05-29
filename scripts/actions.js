@@ -2,6 +2,7 @@
 var gameState = "advancable";
 var pickUpItem = null;
 var sellable = null;
+var monster = null;
 var btn1_eventId = advance;
 var btn2_eventId;
 var btn3_eventId;
@@ -55,17 +56,82 @@ function btnEvents(btn1, btn2, btn3) {
 }
 //#endregion
 //#region Combat
-function damage(amount, trueDamage=false) {
-    if (trueDamage) {
-        player.health -= amount;
+function damage(amount, target, trueDamage=false) {
+    var dmg = amount;
+    if (target == "player") {
+        if (trueDamage == false) {
+            dmg = Math.round(amount / player.resistance);
+        }
+        player.health -= dmg;
     } else {
-        player.health -= amount / player.resistance;
+        dmg = Math.round(amount / monster.resistance);
+        monster.health -= dmg;
     }
+    return dmg;
+}
+
+function dodge(spd1, spd2) {
+    return RNG(1,100) <= (spd1-spd2+0.2)*100;
+}
+
+function RNG_damage(low, high, canCrit=false) {
+    var dmg = RNG(low, high);
+    if (canCrit) {
+        if (RNG(1, 100) <= JSON_items[player.weapon].criticalChance) {
+            dmg *= JSON_items[player.weapon].criticalDmg;
+        }
+    }
+    return dmg;
 }
 
 function heal(n) {
     player.health += n;
     if (player.health > player.maxHealth) player.health = player.maxHealth;
+}
+
+function playerTurn() {
+    let dmg = RNG_damage(JSON_items[player.weapon].lowDmg, JSON_items[player.weapon].highDmg, true);
+    if (dodge(monster.speed, player.speed) == false) {
+        dmg = damage(dmg, "enemy");
+        updateMonsterHP();
+        loadText("You successfully hit the "+ monster.name + " and did " + dmg + " damage!");
+    } else {
+        loadText("You successfully missed xdd");
+    }
+    if (monsterDeathCheck() == false) {
+        btnText("Continue", null, null);
+        btnEvents(monsterTurn, null, null);
+    } else {
+        let m = RNG(18,22);
+        loadText("You eliminated " + monster.name + " and got " + m + "$.");
+        player.money += m;
+        updateStats();
+        monster = null;
+        loadMonster();
+        btnText("Advance", null, null);
+        btnEvents(advance, null, null);
+    }
+}
+
+function monsterTurn() {
+    let dmg = RNG_damage(monster.lowDmg, monster.highDmg);
+    if (dodge(player.speed, monster.speed) == false) {
+        dmg = damage(dmg, "player");
+        updateStats();
+        loadText(monster.name + " hits you and does " + dmg + " damage!");
+    } else {
+        loadText(monster.name + " missed!");
+    }
+    btnText("Attack", null, null);
+    btnEvents(playerTurn, null, null);
+}
+
+function playerDeathCheck() {
+    return player.health <= 0;
+}
+
+function monsterDeathCheck() {
+    return monster.health <= 0;
 }
 //#endregion
 //#region Inventory
@@ -131,7 +197,7 @@ function clickItem() {
             var item = JSON_items[player.inventory[curr]];
             if (item.type == "heal") {
                 if (item.name == "Mysterious Potion") {
-                    if (RNG(1,2) == 1) {heal(item.heal);} else {damage(item.heal/2, true);}
+                    if (RNG(1,2) == 1) {heal(item.heal);} else {damage(item.heal/2, "player", true);}
                 } else {
                     heal(item.heal);
                 }
@@ -198,11 +264,57 @@ function event_money() {
 }
 //#endregion
 //#region Events/monster
+function pickMonster() {
+    let l = [];
+    for (const m in JSON_enemies) {
+        if (floor >= JSON_enemies[m].spawn) {
+            l.push(JSON_enemies[m]);
+        }
+    }
+    return l[RNG(0, l.length-1)];
+}
+
+function updateMonsterHP() {
+    if (monster.health < 0) monster.health = 0;
+    display_enemy1_hp.innerText = monster.health + "/" + monster.maxHealth;
+}
+
+function loadMonster() {
+    if (monster != null) {
+        updateMonsterHP();
+        display_enemy1_sprite.querySelector("img").src = monster.sprite;
+        display_enemy1_sprite.querySelector("img").alt = monster.name;
+    } else {
+        display_enemy1_hp.innerText = "";
+        display_enemy1_sprite.querySelector("img").src = "";
+        display_enemy1_sprite.querySelector("img").alt = "";
+    }
+}
+
+function flee() {
+    var spd = player.speed - monster.speed + 0.2;
+    if (RNG(1,100) <= spd*100) {
+        btnText("Continue", null, null);
+        btnEvents(advance, null, null);
+        loadText("So you fled...");
+        monster = null;
+        loadMonster();
+    } else {
+        gameState = "fight"
+        btnText("Continue", null, null);
+        btnEvents(monsterTurn, null, null);
+        loadText("You couldn't run away...!");
+    }
+}
+
 function event_monster() {
-    gameState = "monster";
-    btnText("Fight!", "Flee!", null);
-    btnEvents(advance, null, null);
-    loadText("Monster!!!! How should I feeeel??");
+    gameState = "monster encounter";
+    monster = pickMonster();
+    monster.health = monster.maxHealth;
+    loadMonster();
+    btnText("Fight", "Flee", null);
+    btnEvents(playerTurn, flee, null);
+    loadText("Oh no! You have encountered a/an " + monster.name + "!");
 }
 //#endregion
 //#region Events/chest
@@ -266,21 +378,27 @@ function shopBrowse() {
         e.addEventListener("click", pickItem);
     }
 }
+var itemIndex;
 
 function pickItem() {
     if (gameState == "shop browse") {
-        let item = shop1[Array.prototype.slice.call(shopItems).indexOf(this)];
-        pickUpItem = item;
-        gameState = "buying";
-        loadText("Would you like to buy the next item?: " + JSON_items[item].name + " (" + JSON_items[item].buyPrice + "$)");
-        btnText("Buy", "Nevermind", null);
-        btnEvents(buy, shopBrowse, null);
+        itemIndex = Array.prototype.slice.call(shopItems).indexOf(this);
+        let item = shop1[itemIndex];
+        if (item != null) {
+            pickUpItem = item;
+            gameState = "buying";
+            loadText("Would you like to buy the next item?: " + JSON_items[item].name + " (" + JSON_items[item].buyPrice + "$)");
+            btnText("Buy", "Nevermind", null);
+            btnEvents(buy, shopBrowse, null);
+        }
     }
 }
 
 function buy() {
     if (player.money >= JSON_items[pickUpItem].buyPrice) {
         player.money -= JSON_items[pickUpItem].buyPrice;
+        shop1[itemIndex] = null;
+        shop.children[itemIndex].querySelector("p").innerText = "";
         updateStats();
         if (JSON_items[pickUpItem].name != "Backpack") {
             addItem();

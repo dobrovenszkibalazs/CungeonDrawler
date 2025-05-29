@@ -1,45 +1,49 @@
 {
     "mano": {
         "name": "Manó",
-        "maxHealth": 20,
-        "health": 20,
-        "lowDmg": 3,
-        "highDmg": 4,
-        "resistance": 0.8,
+        "maxHealth": 40,
+        "health": 40,
+        "lowDmg": 6,
+        "highDmg": 8,
+        "resistance": 1.0,
         "speed": 1.0,
-        "sprite": "./sprites/enemies/mano.png"
+        "sprite": "./sprites/enemies/mano.png",
+        "spawn": 1
     },
 
     "goblin": {
         "name": "Goblin",
-        "maxHealth": 15,
-        "health": 15,
-        "lowDmg": 3,
-        "highDmg": 5,
-        "resistance": 0.6,
-        "speed": 1.2,
-        "sprite": "./sprites/enemies/goblin.png"
+        "maxHealth": 30,
+        "health": 30,
+        "lowDmg": 6,
+        "highDmg": 9,
+        "resistance": 0.8,
+        "speed": 1.3,
+        "sprite": "./sprites/enemies/goblin.png",
+        "spawn": 1
     },
 
     "zombie": {
         "name": "Zombie",
         "maxHealth": 30,
         "health": 30,
-        "lowDmg": 2,
-        "highDmg": 4,
-        "resistance": 0.8,
+        "lowDmg": 5,
+        "highDmg": 6,
+        "resistance": 1.4,
         "speed": 0.6,
-        "sprite": "./sprites/enemies/zombie.png"
+        "sprite": "./sprites/enemies/zombie.png",
+        "spawn": 6
     },
 
     "birb": {
         "name": "Birb",
-        "maxHealth": 10,
-        "health": 10,
+        "maxHealth": 60,
+        "health": 60,
         "lowDmg": 5,
         "highDmg": 7,
-        "resistance": 0.5,
-        "speed": 1.0,
-        "sprite": "./sprites/enemies/birb.png"
+        "resistance": 0.8,
+        "speed": 1.1,
+        "sprite": "./sprites/enemies/birb.png",
+        "spawn": 11
     }
 }
